@@ -1,28 +1,45 @@
 #!/bin/sh
 
-mysqld_safe &
-
 mysql_ready() {
-	mysqladmin ping --host=127.0.0.1 --user=root --password=root > /dev/null 2>&1
+    mysqladmin ping -h 127.0.0.1 -uping -pping > /dev/null 2>&1
 }
 
 while !(mysql_ready)
 do
-	echo "waiting for mysql ..."
-	sleep 3
+    mysql_ready
+    if [ $? -ne 0 ]; then 
+        mysqld_safe &
+        sleep 3s
+    fi
+    echo "[+] Waiting for mysql ..."
+    sleep 3s
 done
 
-if [[ -f /flag.sh ]]; then
-	source /flag.sh
-fi
-
 if [[ -f /var/www/html/db.sql ]]; then
-    mysql -e "source /var/www/html/db.sql" -uroot -proot
+    mysql -h 127.0.0.1 -uroot -proot -e "source /var/www/html/db.sql"
     rm -f /var/www/html/db.sql
 fi
 
-php-fpm &
+if [[ -f /flag.sh ]]; then
+    source /flag.sh
+fi
 
-nginx &
-
-tail -F /dev/null
+while true
+do
+    mysql_ready
+    if [ $? -ne 0 ]; then 
+        mysqld_safe &
+        sleep 3s
+    fi
+    ps -e | grep 'php-fpm' > /dev/null
+    if [ $? -ne 0 ]; then
+        php-fpm &
+        sleep 1s
+    fi
+    ps -e | grep 'nginx:' > /dev/null
+    if [ $? -ne 0 ]; then
+        nginx &
+        sleep 1s
+    fi
+    sleep 5s
+done

@@ -1,15 +1,22 @@
-#!/bin/bash
+#!/bin/sh
 
-if [[ -z $FLAG_COLUMN ]]; then
-	FLAG_COLUMN="flag"
-fi
+# Create database and user
+# mysql -e "create database ctfhub;" -uroot -proot
+# mysql -e "grant select,insert,update,delete on ctfhub.* to ctfhub@'127.0.0.1' identified by 'ctfhub';" -uroot 
 
-if [[ -z $FLAG_TABLE ]]; then
-	FLAG_TABLE="flag"
-fi
+# Set dynamic FLAG
 
-# 修改数据库中的 FLAG 
-mysql -e "USE ctftraining;ALTER TABLE FLAG_TABLE CHANGE FLAG_COLUMN $FLAG_COLUMN CHAR(128) NOT NULL DEFAULT 'not_flag';ALTER TABLE FLAG_TABLE RENAME $FLAG_TABLE;INSERT $FLAG_TABLE VALUES('$FLAG');" -uroot -proot
+# if [[ -f /var/www/html/db.sql ]]; then
+#     sed -i "s#FLAG#$FLAG#" /var/www/html/db.sql || true
+# fi
+
+# mysql -e "USE $FLAG_SCHEMA;ALTER TABLE FLAG_TABLE CHANGE FLAG_COLUMN $FLAG_COLUMN CHAR(128) NOT NULL DEFAULT 'not_flag';ALTER TABLE FLAG_TABLE RENAME $FLAG_TABLE;INSERT $FLAG_TABLE VALUES('$FLAG');" -uroot -proot
+# mysql -e "USE $FLAG_SCHEMA;UPDATE $FLAG_TABLE SET $FLAG_COLUMN=$FLAG" -uroot -proot
+
+
+# Reset mysql root's passwors as random string
+PASS="toor$(date +%N)$RANDOM"
+mysqladmin -uroot -proot password $PASS
 
 export FLAG=not_flag
 FLAG=not_flag

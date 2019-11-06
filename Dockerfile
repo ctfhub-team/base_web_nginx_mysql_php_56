@@ -1,10 +1,8 @@
 FROM php:5.6-fpm-alpine
 
-LABEL Organization="CTFTraining" Author="Virink <virink@outlook.com>"
-MAINTAINER Virink@CTFTraining <virink@outlook.com>
+LABEL Organization="CTFHUB" Author="Virink <virink@outlook.com>"
 
 COPY _files /tmp/
-COPY src /var/www/html
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
     && apk add --update --no-cache tar nginx mysql mysql-client \
@@ -17,16 +15,16 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
     && mysql_install_db --user=mysql --datadir=/var/lib/mysql \
     && sh -c 'mysqld_safe &' \
     && sleep 5s \
-    && mysqladmin -uroot password 'root' \
-    && mysql -e "source /var/www/html/db.sql;" -uroot -proot \
+    && mysqladmin -h '127.0.0.1' -uroot password 'root' \
+    && mysql -h '127.0.0.1' -uroot -proot -e "create user ping@'%' identified by 'ping';" \
     # configure file
     && mv /tmp/flag.sh /flag.sh \
     && mv /tmp/docker-php-entrypoint /usr/local/bin/docker-php-entrypoint \
     && chmod +x /usr/local/bin/docker-php-entrypoint \
     && mv /tmp/nginx.conf /etc/nginx/nginx.conf \
+    && echo '<?php phpinfo();' > /var/www/html/index.php \
     && chown -R www-data:www-data /var/www/html \
     # clear
-    && rm -rf /var/www/html/db.sql \
     && rm -rf /tmp/*
 
 WORKDIR /var/www/html
