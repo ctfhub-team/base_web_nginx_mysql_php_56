@@ -1,4 +1,6 @@
 #!/bin/sh
+# Author : Virink <virink@outlook.com>
+# Date   : 2019/12/16, 17:12
 
 mysql_ready() {
     mysqladmin ping -h 127.0.0.1 -uping -pping > /dev/null 2>&1
@@ -7,11 +9,9 @@ mysql_ready() {
 while !(mysql_ready)
 do
     mysql_ready
-    if [ $? -ne 0 ]; then 
+    if [ $? -ne 0 ]; then
         mysqld_safe &
-        sleep 3s
     fi
-    echo "[+] Waiting for mysql ..."
     sleep 3s
 done
 
@@ -27,19 +27,16 @@ fi
 while true
 do
     mysql_ready
-    if [ $? -ne 0 ]; then 
+    if [ $? -ne 0 ]; then
         mysqld_safe &
-        sleep 3s
     fi
     ps -e | grep 'php-fpm' > /dev/null
     if [ $? -ne 0 ]; then
         php-fpm &
-        sleep 1s
     fi
     ps -e | grep 'nginx:' > /dev/null
     if [ $? -ne 0 ]; then
         nginx &
-        sleep 1s
     fi
     sleep 5s
 done
