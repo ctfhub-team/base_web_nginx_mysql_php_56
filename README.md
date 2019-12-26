@@ -43,7 +43,7 @@ use ctfhub;
 ### Dockerfile
 
 ```
-FROM ctfhub/base_web_nginx_mysql_php_56:v2.0
+FROM ctfhub/base_web_nginx_mysql_php_56
 
 COPY src /var/www/html
 COPY _files/flag.sh /flag.sh
