@@ -10,7 +10,7 @@ while !(mysql_ready)
 do
     mysql_ready
     if [ $? -ne 0 ]; then
-        mysqld_safe &
+        /usr/bin/mysqld --user=root --skip-name-resolve --skip-networking=0 &
     fi
     sleep 3s
 done
