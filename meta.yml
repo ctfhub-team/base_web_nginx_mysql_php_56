@@ -1,0 +1,8 @@
+name: base_web_nginx_mysql_php_56
+title: 基础镜像 WEB Nginx Mariadb PHP 5.6
+desc: 基础镜像 WEB Nginx Mariadb PHP 5.6
+tags:
+  - web
+  - nginx
+  - php5.6
+  - mariadb

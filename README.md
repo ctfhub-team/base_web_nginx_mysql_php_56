@@ -2,7 +2,7 @@
 
 - L: Linux alpine
 - N: Nginx
-- M: MySQL
+- M: MySQL - Mariadb
 - P: PHP 5.6
 - PHP MySQL Ext
     + mysql

@@ -4,6 +4,6 @@ services:
     build: .
     image: ctfhub/base_web_nginx_mysql_php_56
     ports:
-      - "127.0.0.1:8085:80"
+      - "8085:80"
     environment:
       - FLAG=ctfhub{nginx_mysql_php_56}

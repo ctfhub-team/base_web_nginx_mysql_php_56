@@ -4,7 +4,7 @@ LABEL Organization="CTFHUB" Author="Virink <virink@outlook.com>"
 
 COPY _files /tmp/
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories \
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
     && apk add --update --no-cache tar nginx mysql mysql-client \
     && mkdir /run/nginx \
     # mysql ext
