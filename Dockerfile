@@ -15,7 +15,9 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && mysql_install_db --user=mysql --datadir=/var/lib/mysql \
     && sh -c 'mysqld_safe &' \
     && sleep 5s \
-    && mysqladmin -uroot password 'root' \
+    # && mysqladmin -uroot password 'root' \
+    # Fix: Update all root password
+    && mysql -uroot -proot -e "UPDATE mysql.user SET Password=PASSWORD('root') WHERE user='root';" \
     && mysql -uroot -proot -e "create user ping@'%' identified by 'ping';" \
     # configure file
     && mv /tmp/flag.sh /flag.sh \
@@ -32,3 +34,5 @@ WORKDIR /var/www/html
 EXPOSE 80
 
 VOLUME ["/var/log/nginx"]
+
+ENTRYPOINT ["/bin/sh", "/usr/local/bin/docker-php-entrypoint"]

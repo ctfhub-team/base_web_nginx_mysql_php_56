@@ -3,21 +3,26 @@
 # Date   : 2019/12/16, 17:12
 
 mysql_ready() {
+    echo "[+] Ping mysql"
     mysqladmin ping -h 127.0.0.1 -uping -pping > /dev/null 2>&1
+}
+
+run_mysql() {
+    /usr/bin/mysqld --user=root --skip-name-resolve --skip-networking=0 &
 }
 
 while !(mysql_ready)
 do
     mysql_ready
     if [ $? -ne 0 ]; then
-        /usr/bin/mysqld --user=root --skip-name-resolve --skip-networking=0 &
+        run_mysql
     fi
     sleep 3s
 done
 
 if [[ -f /var/www/html/db.sql ]]; then
     echo "[+] Init db.sql"
-    mysql -h 127.0.0.1 -uroot -proot -e "source /var/www/html/db.sql"
+    mysql -uroot -proot -e "source /var/www/html/db.sql"
     rm -f /var/www/html/db.sql
 fi
 
@@ -30,7 +35,7 @@ while true
 do
     mysql_ready
     if [ $? -ne 0 ]; then
-        mysqld_safe &
+        run_mysql
     fi
     ps -e | grep 'php-fpm' > /dev/null
     if [ $? -ne 0 ]; then

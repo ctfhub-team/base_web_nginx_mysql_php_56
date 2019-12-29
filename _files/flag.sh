@@ -15,8 +15,7 @@
 
 
 # Reset mysql root's passwors as random string
-PASS="toor$(date +%N)$RANDOM"
-mysqladmin -uroot -proot password $PASS
+mysql -uroot -proot -e "UPDATE mysql.user SET Password=PASSWORD(substring(MD5(RAND()),1,20)) WHERE user='root';"
 
 export FLAG=not_flag
 FLAG=not_flag
