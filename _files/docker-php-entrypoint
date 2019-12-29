@@ -37,11 +37,11 @@ do
     if [ $? -ne 0 ]; then
         run_mysql
     fi
-    ps -e | grep 'php-fpm' > /dev/null
+    ps -e | grep 'php-fpm' | grep -v grep > /dev/null
     if [ $? -ne 0 ]; then
         php-fpm &
     fi
-    ps -e | grep 'nginx:' > /dev/null
+    ps -e | grep 'nginx:' | grep -v grep > /dev/null
     if [ $? -ne 0 ]; then
         nginx &
     fi
