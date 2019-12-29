@@ -16,11 +16,13 @@ do
 done
 
 if [[ -f /var/www/html/db.sql ]]; then
+    echo "[+] Init db.sql"
     mysql -h 127.0.0.1 -uroot -proot -e "source /var/www/html/db.sql"
     rm -f /var/www/html/db.sql
 fi
 
 if [[ -f /flag.sh ]]; then
+    echo "[+] Init flag.sh"
     source /flag.sh
 fi
 
