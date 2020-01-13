@@ -12,6 +12,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && docker-php-ext-install mysql mysqli pdo_mysql \
     && docker-php-source delete \
     # init mysql
+    # && sed -i 's/skip-network/#skip-network/' /etc/my.cnf.d/mariadb-server.cnf \
     && mysql_install_db --user=mysql --datadir=/var/lib/mysql \
     && sh -c 'mysqld_safe &' \
     && sleep 5s \
@@ -20,6 +21,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && mysql -uroot -proot -e "UPDATE mysql.user SET Password=PASSWORD('root') WHERE user='root';" \
     && mysql -uroot -proot -e "create user ping@'%' identified by 'ping';" \
     # configure file
+    && cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
+    && sed -i -e 's/display_errors.*/display_errors = Off/' /usr/local/etc/php/php.ini \
     && mv /tmp/flag.sh /flag.sh \
     && mv /tmp/docker-php-entrypoint /usr/local/bin/docker-php-entrypoint \
     && chmod +x /usr/local/bin/docker-php-entrypoint \
