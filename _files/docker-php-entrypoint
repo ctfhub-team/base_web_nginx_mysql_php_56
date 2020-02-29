@@ -19,6 +19,7 @@ do
     sleep 3s
 done
 
+# Just For Old Version, should be do this in Dockerfile
 if [[ -f /var/www/html/db.sql ]]; then
     echo "[+] Init db.sql"
     mysql -uroot -proot -e "source /var/www/html/db.sql"

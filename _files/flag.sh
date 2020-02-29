@@ -6,6 +6,8 @@
 
 # Set dynamic FLAG
 
+touch /var/www/html/flag_$FLAG
+
 # if [[ -f /var/www/html/db.sql ]]; then
 #     sed -i "s#FLAG#$FLAG#" /var/www/html/db.sql || true
 # fi
